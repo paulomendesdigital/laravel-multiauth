@@ -89,7 +89,7 @@ Copy all content from `app/User.php` to `app/Admin.php`
 Change the class name from `User` to `Admin` in the `app/Admin.php` file
 
 ---
-At the `app/Http/Controllers/Admin/ForgotController.php` change de below lines
+At the `app/Http/Controllers/Admin/ForgotController.php` file make the changes like below
 
 this:
 ```
@@ -101,7 +101,7 @@ $this->middleware('guest:admin');
 ```
 ---
 
-At the `app/Http/Controllers/Admin/LoginController.php` change de below lines
+At the `app/Http/Controllers/Admin/LoginController.php` file make the changes like below
 
 this:
 ```
@@ -122,7 +122,7 @@ $this->middleware('guest:admin')->except('logout');
 ```
 ---
 
-At the `app/Http/Controllers/Admin/RegisterController.php` change de below lines
+At the `app/Http/Controllers/Admin/RegisterController.php` file make the changes like below
 
 this:
 ```
@@ -143,7 +143,7 @@ $this->middleware('guest:admin');
 ```
 ---
 
-At the `app/Http/Controllers/Admin/ResetController.php` change de below lines
+At the `app/Http/Controllers/Admin/ResetController.php` file make the changes like below
 
 this:
 ```
@@ -164,7 +164,7 @@ $this->middleware('guest:admin');
 ```
 ---
 
-At the `app/Http/Controllers/Admin/VerificationController.php` change de below lines
+At the `app/Http/Controllers/Admin/VerificationController.php` file make the changes like below
 
 this:
 ```

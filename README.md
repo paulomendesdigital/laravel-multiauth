@@ -13,14 +13,14 @@ composer require laravel/ui --dev
 php artisan ui:auth
 ```
 
-Create a folder at `app/Http/Controllers` with name `Admin`
+Create a folder at `app/Http/Controllers/` with name `Admin`
 
-Copy all files from `app/Http/Controllers/Auth` to `app/Http/Controllers/Admin`
+Copy all files from `app/Http/Controllers/Auth/` to `app/Http/Controllers/Admin/`
   - Change the namespace of the copied files from `Auth` to `Admin`
 
-Create a folder at `resources/view` with name `admin`
+Create a folder at `resources/views/` with name `admin`
 
-Copy all files and folders from `resources/views/auth` to `resources/views/admin`
+Copy all files and folders from `resources/views/auth/` to `resources/views/admin/`
   - Add `admin.` at the begin of routes
 
 In the `routes/web.php` create the routes below
@@ -39,9 +39,9 @@ Route::group(['namespace' => 'Admin'], function() {
 });
 ```
 
-Create a file at `app/Http/Controllers` with name `AdminController.php`
+Create a file at `app/Http/Controllers/` with name `AdminController.php`
 
-Copy the content of `HomeController.php` file at `app/Http/Controllers` to `AdminController.php`
+Copy the content of `HomeController.php` file at `app/Http/Controllers/` to `AdminController.php`
 
 Change the class name from `HomeController` to `AdminController` in the `AdminController.php` file
 
@@ -54,7 +54,7 @@ public function __construct()
 }
 ```
 
-Add the line below at `config/auth.php` in the `guards` array, after `web` array
+Add the code below at `config/auth.php` in the `guards` array, after `web` array
 
 ```
 'admin' => [
@@ -63,7 +63,7 @@ Add the line below at `config/auth.php` in the `guards` array, after `web` array
 ],
 ```
 
-Add the line below at `config/auth.php` in the `providers` array, after `users` array
+Add the code below at `config/auth.php` in the `providers` array, after `users` array
 
 ```
 'admins' => [
@@ -72,7 +72,7 @@ Add the line below at `config/auth.php` in the `providers` array, after `users` 
 ],
 ```
 
-Add the line below at `config/auth.php` in the `passwords` array, after `users` array
+Add the code below at `config/auth.php` in the `passwords` array, after `users` array
 
 ```
 'admins' => [
@@ -82,7 +82,7 @@ Add the line below at `config/auth.php` in the `passwords` array, after `users` 
 ],
 ```
 
-Create a file at `app` with name `Admin.php`
+Create a file at `app/` with name `Admin.php`
 
 Copy all content from `app/User.php` to `app/Admin.php`
 
@@ -191,7 +191,7 @@ Create a migration to `Admin` typing the code below at the terminal
 php artisan make:migration createAdminTable --create=Admins
 ```
 
-Copy all the `Schema` from `User` migration to `Admin` migrate you just created
+Copy all the `Schema` from `User` migration to `Admin` migration you just created
 - Example of user's Schema:
 ```
 $table->bigIncrements('id');
@@ -203,7 +203,7 @@ $table->rememberToken();
 $table->timestamps();
 ```
 
-At the terminal run migrate with the code below
+At the terminal run migrate with the line below
 
 ```
 php artisan migrate
@@ -310,7 +310,7 @@ public function handle($request, Closure $next, $guard = null)
 }
 ```
 
-At the `Handler.php` file at `app/Exceptions` use the `AuthenticationException` like below
+At the `Handler.php` file at `app/Exceptions/` use the `AuthenticationException` like below
 
 ```
 use Illuminate\Auth\AuthenticationException;

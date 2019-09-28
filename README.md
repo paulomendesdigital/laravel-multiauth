@@ -38,9 +38,9 @@ Route::group(['namespace' => 'Admin'], function() {
 
 Create a file at `app/Http/Controllers` with name `AdminController.php`
 
-Copy the content of file `HomeController.php` at `app/Http/Controllers` to `app/Http/Controllers/AdminController.php`
+Copy the content of `HomeController.php` file at `app/Http/Controllers` to `app/Http/Controllers/AdminController.php`
 
-Change the class name from `HomeController` to `AdminController` in the file `app/Http/Controllers/AdminController.php`
+Change the class name from `HomeController` to `AdminController` in the `app/Http/Controllers/AdminController.php` file
 
 Comment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` like example below
 
@@ -83,7 +83,7 @@ Create a file at `app` with name `Admin.php`
 
 Copy all content from `app/User.php` to `app/Admin.php`
 
-Change the class name from `User` to `Admin` in the file `app/Admin.php`
+Change the class name from `User` to `Admin` in the `app/Admin.php` file
 
 At the `app/Http/Controllers/Admin/ForgotController.php` change de below lines
 
@@ -178,11 +178,11 @@ protected $redirectTo = 'admin/home';
 ---
 and this:
 ```
-$this->middleware('guest');
+$this->middleware('auth');
 ```
 to:
 ```
-$this->middleware('guest:admin');
+$this->middleware('auth:admin');
 ```
 ---
 
@@ -210,42 +210,135 @@ At the terminal run migrate with the code below
 php artisan migrate
 ```
 
+Go to `app/Http/Controllers/Admin/LoginController.php` and you'll see that code `use AuthenticatesUsers;`
 
- 
+If your IDE permite press Ctrl and click on the `AuthenticatesUsers` or open the `AuthenticatesUsers.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
+
+Copy the function `showLoginForm()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
+
+```
+public function showLoginForm()
+{
+    return view('auth.login');
+}
+```
+
+In the function `showLoginForm()` inside `app/Http/Controllers/Admin/LoginController.php` make the change below
+
+---
+this:
+```
+return view('auth.login');
+```
+to:
+```
+return view('admin.login');
+```
+---
+
+Copy the function `guard()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
+
+```
+protected function guard()
+{
+    return Auth::guard('admin');
+}
+```
+
+Use Auth Facade in `LoginController.php` file
+
+```
+use Illuminate\Support\Facades\Auth;
+```
+
+Uncomment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` like example below 
+
+```
+public function __construct()
+{
+    $this->middleware('auth');
+}
+```
+
+And still inside `AdminController.php` file make the change below
+
+---
+this:
+```
+$this->middleware('auth');
+```
+to:
+```
+$this->middleware('auth:admin');
+```
+
+Open the `RedirectIfAuthenticated.php` file at `app/Http/Middleware/` and make the changes below
+
+---
+this:
+```
+public function handle($request, Closure $next, $guard = null)
+{
+    if (Auth::guard($guard)->check()) {
+        return redirect('/home');
+    }
+
+    return $next($request);
+}
+```
+to:
+```
+public function handle($request, Closure $next, $guard = null)
+{
+    switch ($guard) {
+
+        case 'admin':
+            if (Auth::guard($guard)->check())
+                return redirect('admin/home');
+
+            break;
+
+        default:
+            if (Auth::guard($guard)->check())
+                return redirect('/home');
+
+            break;
+
+    }
 
 
+    return $next($request);
+}
+```
 
+At the `Handler.php` file at `app/Exceptions` use the `AuthenticationException` like below
 
+```
+use Illuminate\Auth\AuthenticationException;
+```
 
+And still inside the `Handler.php` add the function `unauthenticated()` like below
 
+```
+protected function unauthenticated($request, AuthenticationException $exception)
+{
+    if ($request->expectsJson())
+        return response()->json(['message' => $exception->getMessage()], 401);
 
+    $guard = $exception->guards()[0];
 
+    switch ($guard) {
+        case 'admin':
+            return redirect()->guest(route('admin.login'));
+            break;
 
+        default:
+            return redirect()->guest($exception->redirectTo() ?? route('login'));
+            break;
+    }
+}
+```
 
+The code above is to overwrite the function inside the `Illuminate Handler.php` file that is using at the class `Handler` at path `app/Exceptions/`
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+You can see inside the `Handler.php` file the class usage on the line containing `use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;` code

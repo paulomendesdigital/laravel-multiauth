@@ -41,11 +41,11 @@ Route::group(['namespace' => 'Admin'], function() {
 
 Create a file at `app/Http/Controllers` with name `AdminController.php`
 
-Copy the content of `HomeController.php` file at `app/Http/Controllers` to `app/Http/Controllers/AdminController.php`
+Copy the content of `HomeController.php` file at `app/Http/Controllers` to `AdminController.php`
 
-Change the class name from `HomeController` to `AdminController` in the `app/Http/Controllers/AdminController.php` file
+Change the class name from `HomeController` to `AdminController` in the `AdminController.php` file
 
-Comment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` like example below
+Comment the line `$this->middleware('auth');` at `AdminController.php` like example below
 
 ```
 public function __construct()
@@ -213,9 +213,9 @@ At the terminal run migrate with the code below
 php artisan migrate
 ```
 
-Go to `app/Http/Controllers/Admin/LoginController.php` and you'll see that code `use AuthenticatesUsers;`
+Go to `app/Http/Controllers/Admin/LoginController.php` and you'll see the code `use AuthenticatesUsers;`
 
-If your IDE permite press Ctrl and click on the `AuthenticatesUsers` or open the `AuthenticatesUsers.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
+If your IDE permite, press Ctrl and click on the `AuthenticatesUsers` or open the `AuthenticatesUsers.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
 
 Copy the function `showLoginForm()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
 
@@ -254,7 +254,7 @@ Use Auth Facade in `LoginController.php` file
 use Illuminate\Support\Facades\Auth;
 ```
 
-Uncomment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` like example below 
+Uncomment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` file like example below 
 
 ```
 public function __construct()

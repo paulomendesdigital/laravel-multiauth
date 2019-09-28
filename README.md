@@ -1,5 +1,5 @@
-# Laravel Multiauth
-Step by step to create a multiauth system with Laravel
+# Laravel 6 Multiauth
+Step by step to create a multiauth system with Laravel 6
 
 At the example below we will create a multiauth with login and admin area
 

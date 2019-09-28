@@ -7,6 +7,9 @@ In the terminal run the code below (this needs of composer)
 
 ```
 composer require laravel/ui --dev
+```
+
+```
 php artisan ui:auth
 ```
 

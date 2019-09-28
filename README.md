@@ -3,7 +3,7 @@ Step by step to create a multiauth system with Laravel 6
 
 At the example below we will create a multiauth with login and admin area
 
-In the terminal run the code below (this needs of composer)
+In the terminal run the code below to generate Laravel 6 default login system
 
 ```
 composer require laravel/ui --dev

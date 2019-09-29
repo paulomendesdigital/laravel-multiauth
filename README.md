@@ -604,6 +604,14 @@ return view('admin.passwords.reset')->with(
 ```
 ---
 
+At the `app/Http/Controllers/Admin/ResetPasswordController.php` file use the `Request` like below
+
+```php
+<?php
+
+use Illuminate\Http\Request;
+```
+
 Copy the function `broker()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
 
 ```php
@@ -632,6 +640,14 @@ return Password::broker('admins');
 ```
 ---
 
+At the `app/Http/Controllers/Admin/ResetPasswordController.php` file use the `Password` like below
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Password;
+```
+
 Copy the function `guard()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
 
 ```php
@@ -659,6 +675,14 @@ to:
 return Auth::guard('admin');
 ```
 ---
+
+At the `app/Http/Controllers/Admin/ResetPasswordController.php` file use the `Auth` like below
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Auth;
+```
 
 
 

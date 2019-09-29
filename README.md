@@ -398,8 +398,6 @@ At the `app/Http/Controllers/Admin/ForgotPasswordController.php` file use the `P
 use Illuminate\Support\Facades\Password;
 ```
 
-Send custom email to reset password
-----------
 At the terminal run the below code to create a new notification
 
 ```

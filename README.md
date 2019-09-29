@@ -415,7 +415,8 @@ The code above is to overwrite the function inside the `Illuminate Handler.php` 
 You can see inside the `Handler.php` file the class usage on the line containing `use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;` code
 
 ResetPassword
-----------
+---
+
 Go to `app/Http/Controllers/Admin/ForgotPasswordController.php` and you'll see the code `use SendsPasswordResetEmails;`
 
 If your IDE permite, press Ctrl and click on the `SendsPasswordResetEmails` or open the `SendsPasswordResetEmails.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
@@ -682,6 +683,60 @@ At the `app/Http/Controllers/Admin/ResetPasswordController.php` file use the `Au
 <?php
 
 use Illuminate\Support\Facades\Auth;
+```
+
+Login With Status
+---
+
+Add in your database a column in the table `admins` with name `status` of type `boolean` and default value `0`
+
+You can do this adding a column in your migration teachers like below
+```php
+<?php
+//...
+
+$table->boolean('status')->default(0);
+
+//...
+```
+
+Go to `app/Http/Controllers/Admin/LoginController.php` and you'll see the code `use AuthenticatesUsers;`
+
+If your IDE permite, press Ctrl and click on the `AuthenticatesUsers` or open the `AuthenticatesUsers.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
+
+Copy the function `credentials()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
+
+```php
+<?php
+protected function credentials(Request $request)
+{
+    return $request->only($this->username(), 'password');
+}
+```
+
+In the function `credentials()` inside `app/Http/Controllers/Admin/LoginController.php` make the change below
+
+---
+this:
+```php
+<?php
+
+return $request->only($this->username(), 'password');
+```
+to:
+```php
+<?php
+
+return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
+```
+---
+
+At the `app/Http/Controllers/Admin/LoginController.php` file use the `Request` like below
+
+```php
+<?php
+
+use Illuminate\Http\Request;
 ```
 
 

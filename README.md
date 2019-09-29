@@ -32,9 +32,9 @@ Route::group(['namespace' => 'Admin'], function() {
 
     Route::GET('admin', 'LoginController@showLoginForm')->name('admin.login');
     Route::POST('admin', 'LoginController@login');
-    Route::POST('admin-password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('admin.email');
+    Route::POST('admin-password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
     Route::GET('admin-password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
-    Route::POST('admin-password/reset', 'ResetPasswordController@reset');
+    Route::POST('admin-password/reset', 'ResetPasswordController@reset')->name('admin.password.update');
     Route::GET('admin-password/reset/{token}', 'ResetPasswordController@showResetForm')->name('admin.password.reset');
 });
 ```
@@ -341,3 +341,193 @@ protected function unauthenticated($request, AuthenticationException $exception)
 The code above is to overwrite the function inside the `Illuminate Handler.php` file that is using at the class `Handler` at path `app/Exceptions/`
 
 You can see inside the `Handler.php` file the class usage on the line containing `use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;` code
+
+ResetPassword
+----------
+Go to `app/Http/Controllers/Admin/ForgotPasswordController.php` and you'll see the code `use SendsPasswordResetEmails;`
+
+If your IDE permite, press Ctrl and click on the `SendsPasswordResetEmails` or open the `SendsPasswordResetEmails.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
+
+Copy the function `showLinkRequestForm()` from `SendsPasswordResetEmails.php` to `app/Http/Controllers/Admin/ForgotPasswordController.php`
+
+```
+public function showLinkRequestForm()
+{
+    return view('auth.passwords.email');
+}
+```
+
+In the function `showLinkRequestForm()` inside `app/Http/Controllers/Admin/ForgotPasswordController.php` make the change below
+
+---
+this:
+```
+return view('auth.passwords.email');
+```
+to:
+```
+return view('admin.passwords.email');
+```
+---
+
+And copy the function `broker()` from `SendsPasswordResetEmails.php` to `app/Http/Controllers/Admin/ForgotPasswordController.php`
+
+```
+public function broker()
+{
+    return Password::broker('admins');
+}
+```
+
+In the function `broker()` inside `app/Http/Controllers/Admin/ForgotPasswordController.php` make the change below
+
+---
+this:
+```
+return Password::broker();
+```
+to:
+```
+return Password::broker('admins');
+```
+---
+
+At the `app/Http/Controllers/Admin/ForgotPasswordController.php` file use the `Password` Facade like below
+
+```
+use Illuminate\Support\Facades\Password;
+```
+
+Send custom email to reset password
+----------
+At the terminal run the below code to create a new notification
+
+```
+php artisan make:notification AdminResetPasswordNotification
+```
+
+Go to `vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php` and copy the `return` from `toMail` function to `toMail` function inside the new notification you just created `AdminResetPasswordNotification`
+
+`return` from ResetPassword.php below:
+```
+return (new MailMessage)
+    ->subject(Lang::get('Reset Password Notification'))
+    ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
+    ->action(Lang::get('Reset Password'), url(config('app.url').route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
+    ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+    ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+```
+
+At the `app/Notifications/AdminResetPasswordNotification.php` file use the `Lang` Facade like below
+
+```
+use Illuminate\Support\Facades\Lang;
+```
+
+Inside the `toMail` function from `AdminResetPasswordNotification` change the route like below
+
+this:
+```
+password.reset
+```
+to:
+```
+admin.password.reset
+```
+
+Still inside `AdminResetPasswordNotification` at the `construct` put the `$token` varial as parameter and set `$this->token = $token;` like below
+
+```
+public function __construct($token)
+{
+    $this->token = $token;
+}
+```
+
+Go to `vendor/laravel/framework/src/Illuminate/Auth/Passwords/CanResetPassword.php` and copy the function `sendPasswordResetNotification()` to `app/Admin.php`
+
+```
+public function sendPasswordResetNotification($token)
+{
+    $this->notify(new ResetPasswordNotification($token));
+}
+```
+
+At the `app/Admin.php` file use the `AdminResetPasswordNotification` like below
+
+```
+use App\Notifications\AdminResetPasswordNotification;
+```
+
+In the function `sendPasswordResetNotification()` inside `app/Admin.php` make the change below
+
+---
+this:
+```
+$this->notify(new ResetPasswordNotification($token));
+```
+to:
+```
+$this->notify(new AdminResetPasswordNotification($token));
+```
+---
+
+Go to `app/Http/Controllers/Admin/ResetPasswordController.php` and you'll see the code `use ResetsPasswords;`
+
+If your IDE permite, press Ctrl and click on the `ResetsPasswords` or open the `ResetsPasswords.php` file at `vendor/laravel/framework/src/Illuminate/Foundation/Auth/`
+
+Copy the function `showResetForm()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
+
+```
+public function showResetForm(Request $request, $token = null)
+{
+    return view('auth.passwords.reset')->with(
+        ['token' => $token, 'email' => $request->email]
+    );
+}
+```
+
+In the function `showResetForm()` inside `app/Http/Controllers/Admin/ResetPasswordController.php` make the change below
+
+---
+this:
+```
+return view('auth.passwords.reset')->with(
+```
+to:
+```
+return view('admin.passwords.reset')->with(
+```
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

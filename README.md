@@ -10,7 +10,7 @@ $ composer require laravel/ui --dev
 ```
 
 ```
-php artisan ui:authphp artisan ui:auth
+$ php artisan ui:authphp artisan ui:auth
 ```
 
 Create a folder at `app/Http/Controllers/` with name `Admin`

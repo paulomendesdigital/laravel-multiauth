@@ -6,11 +6,11 @@ At the example below we will create a multiauth with login and admin area
 In the terminal run the code below to generate Laravel 6 default login system
 
 ```
-composer require laravel/ui --dev
+$ composer require laravel/ui --dev
 ```
 
 ```
-php artisan ui:auth
+php artisan ui:authphp artisan ui:auth
 ```
 
 Create a folder at `app/Http/Controllers/` with name `Admin`
@@ -234,7 +234,7 @@ $this->middleware('auth:admin');
 Create a migration to `Admin` typing the code below at the terminal
 
 ```
-php artisan make:migration createAdminTable --create=Admins
+$ php artisan make:migration createAdminTable --create=Admins
 ```
 
 Copy all the `Schema` from `User` migration to `Admin` migration you just created
@@ -254,7 +254,7 @@ $table->timestamps();
 At the terminal run migrate with the line below
 
 ```
-php artisan migrate
+$ php artisan migrate
 ```
 
 Go to `app/Http/Controllers/Admin/LoginController.php` and you'll see the code `use AuthenticatesUsers;`
@@ -487,7 +487,7 @@ use Illuminate\Support\Facades\Password;
 At the terminal run the below code to create a new notification
 
 ```
-php artisan make:notification AdminResetPasswordNotification
+$ php artisan make:notification AdminResetPasswordNotification
 ```
 
 Go to `vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php` and copy the `return` from `toMail` function to `toMail` function inside the new notification you just created `AdminResetPasswordNotification`

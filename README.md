@@ -500,6 +500,50 @@ return view('admin.passwords.reset')->with(
 ```
 ---
 
+Copy the function `broker()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
+
+```
+public function broker()
+{
+    return Password::broker();
+}
+```
+
+In the function `broker()` inside `app/Http/Controllers/Admin/ResetPasswordController.php` make the change below
+
+---
+this:
+```
+return Password::broker();
+```
+to:
+```
+return Password::broker('admins');
+```
+---
+
+Copy the function `guard()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
+
+```
+protected function guard()
+{
+    return Auth::guard();
+}
+```
+
+In the function `broker()` inside `app/Http/Controllers/Admin/ResetPasswordController.php` make the change below
+
+---
+this:
+```
+return Auth::guard();
+```
+to:
+```
+return Auth::guard('admin');
+```
+---
+
 
 
 

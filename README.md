@@ -25,7 +25,7 @@ Copy all files and folders from `resources/views/auth/` to `resources/views/admi
 
 In the `routes/web.php` create the routes below
 
-```
+```php
 <?php
 
 Route::GET('admin/home', 'AdminController@index');
@@ -49,7 +49,7 @@ Change the class name from `HomeController` to `AdminController` in the `AdminCo
 
 Comment the line `$this->middleware('auth');` at `AdminController.php` like example below
 
-```
+```php
 <?php
 
 public function __construct()
@@ -60,7 +60,7 @@ public function __construct()
 
 Add the code below at `config/auth.php` in the `guards` array, after `web` array
 
-```
+```php
 <?php
 
 'admin' => [
@@ -71,7 +71,7 @@ Add the code below at `config/auth.php` in the `guards` array, after `web` array
 
 Add the code below at `config/auth.php` in the `providers` array, after `users` array
 
-```
+```php
 <?php
 
 'admins' => [
@@ -82,7 +82,7 @@ Add the code below at `config/auth.php` in the `providers` array, after `users` 
 
 Add the code below at `config/auth.php` in the `passwords` array, after `users` array
 
-```
+```php
 <?php
 
 'admins' => [
@@ -102,13 +102,13 @@ Change the class name from `User` to `Admin` in the `app/Admin.php` file
 At the `app/Http/Controllers/Admin/ForgotController.php` file make the changes like below
 
 this:
-```
+```php
 <?php
 
 $this->middleware('guest');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('guest:admin');
@@ -118,26 +118,26 @@ $this->middleware('guest:admin');
 At the `app/Http/Controllers/Admin/LoginController.php` file make the changes like below
 
 this:
-```
+```php
 <?php
 
 protected $redirectTo = '/home';
 ```
 to :
-```
+```php
 <?php
 
 protected $redirectTo = 'admin/home';
 ```
 ---
 and this:
-```
+```php
 <?php
 
 $this->middleware('guest')->except('logout');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('guest:admin')->except('logout');
@@ -147,26 +147,26 @@ $this->middleware('guest:admin')->except('logout');
 At the `app/Http/Controllers/Admin/RegisterController.php` file make the changes like below
 
 this:
-```
+```php
 <?php
 
 protected $redirectTo = '/home';
 ```
 to :
-```
+```php
 <?php
 
 protected $redirectTo = 'admin/home';
 ```
 ---
 and this:
-```
+```php
 <?php
 
 $this->middleware('guest');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('guest:admin');
@@ -176,26 +176,26 @@ $this->middleware('guest:admin');
 At the `app/Http/Controllers/Admin/ResetController.php` file make the changes like below
 
 this:
-```
+```php
 <?php
 
 protected $redirectTo = '/home';
 ```
 to :
-```
+```php
 <?php
 
 protected $redirectTo = 'admin/home';
 ```
 ---
 and this:
-```
+```php
 <?php
 
 $this->middleware('guest');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('guest:admin');
@@ -205,26 +205,26 @@ $this->middleware('guest:admin');
 At the `app/Http/Controllers/Admin/VerificationController.php` file make the changes like below
 
 this:
-```
+```php
 <?php
 
 protected $redirectTo = '/home';
 ```
 to :
-```
+```php
 <?php
 
 protected $redirectTo = 'admin/home';
 ```
 ---
 and this:
-```
+```php
 <?php
 
 $this->middleware('auth');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('auth:admin');
@@ -239,7 +239,7 @@ php artisan make:migration createAdminTable --create=Admins
 
 Copy all the `Schema` from `User` migration to `Admin` migration you just created
 - Example of user's Schema:
-```
+```php
 <?php
 
 $table->bigIncrements('id');
@@ -263,7 +263,7 @@ If your IDE permite, press Ctrl and click on the `AuthenticatesUsers` or open th
 
 Copy the function `showLoginForm()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
 
-```
+```php
 <?php
 
 public function showLoginForm()
@@ -276,13 +276,13 @@ In the function `showLoginForm()` inside `app/Http/Controllers/Admin/LoginContro
 
 ---
 this:
-```
+```php
 <?php
 
 return view('auth.login');
 ```
 to:
-```
+```php
 <?php
 
 return view('admin.login');
@@ -291,7 +291,7 @@ return view('admin.login');
 
 Copy the function `guard()` from `AuthenticateUsers.php` to `app/Http/Controllers/Admin/LoginController.php`
 
-```
+```php
 <?php
 
 protected function guard()
@@ -302,7 +302,7 @@ protected function guard()
 
 Use Auth Facade in `LoginController.php` file
 
-```
+```php
 <?php
 
 use Illuminate\Support\Facades\Auth;
@@ -310,7 +310,7 @@ use Illuminate\Support\Facades\Auth;
 
 Uncomment the line `$this->middleware('auth');` at `app/Http/Controller/AdminController.php` file like example below 
 
-```
+```php
 <?php
 
 public function __construct()
@@ -323,13 +323,13 @@ And still inside `AdminController.php` file make the change below
 
 ---
 this:
-```
+```php
 <?php
 
 $this->middleware('auth');
 ```
 to:
-```
+```php
 <?php
 
 $this->middleware('auth:admin');
@@ -339,7 +339,7 @@ Open the `RedirectIfAuthenticated.php` file at `app/Http/Middleware/` and make t
 
 ---
 this:
-```
+```php
 <?php
 
 public function handle($request, Closure $next, $guard = null)
@@ -352,7 +352,7 @@ public function handle($request, Closure $next, $guard = null)
 }
 ```
 to:
-```
+```php
 <?php
 
 public function handle($request, Closure $next, $guard = null)
@@ -380,7 +380,7 @@ public function handle($request, Closure $next, $guard = null)
 
 At the `Handler.php` file at `app/Exceptions/` use the `AuthenticationException` like below
 
-```
+```php
 <?php
 
 use Illuminate\Auth\AuthenticationException;
@@ -388,7 +388,7 @@ use Illuminate\Auth\AuthenticationException;
 
 And still inside the `Handler.php` add the function `unauthenticated()` like below
 
-```
+```php
 <?php
 
 protected function unauthenticated($request, AuthenticationException $exception)
@@ -422,7 +422,7 @@ If your IDE permite, press Ctrl and click on the `SendsPasswordResetEmails` or o
 
 Copy the function `showLinkRequestForm()` from `SendsPasswordResetEmails.php` to `app/Http/Controllers/Admin/ForgotPasswordController.php`
 
-```
+```php
 <?php
 
 public function showLinkRequestForm()
@@ -435,13 +435,13 @@ In the function `showLinkRequestForm()` inside `app/Http/Controllers/Admin/Forgo
 
 ---
 this:
-```
+```php
 <?php
 
 return view('auth.passwords.email');
 ```
 to:
-```
+```php
 <?php
 
 return view('admin.passwords.email');
@@ -450,7 +450,7 @@ return view('admin.passwords.email');
 
 And copy the function `broker()` from `SendsPasswordResetEmails.php` to `app/Http/Controllers/Admin/ForgotPasswordController.php`
 
-```
+```php
 <?php
 
 public function broker()
@@ -463,13 +463,13 @@ In the function `broker()` inside `app/Http/Controllers/Admin/ForgotPasswordCont
 
 ---
 this:
-```
+```php
 <?php
 
 return Password::broker();
 ```
 to:
-```
+```php
 <?php
 
 return Password::broker('admins');
@@ -478,7 +478,7 @@ return Password::broker('admins');
 
 At the `app/Http/Controllers/Admin/ForgotPasswordController.php` file use the `Password` Facade like below
 
-```
+```php
 <?php
 
 use Illuminate\Support\Facades\Password;
@@ -493,7 +493,7 @@ php artisan make:notification AdminResetPasswordNotification
 Go to `vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php` and copy the `return` from `toMail` function to `toMail` function inside the new notification you just created `AdminResetPasswordNotification`
 
 `return` from ResetPassword.php below:
-```
+```php
 <?php
 
 return (new MailMessage)
@@ -506,7 +506,7 @@ return (new MailMessage)
 
 At the `app/Notifications/AdminResetPasswordNotification.php` file use the `Lang` Facade like below
 
-```
+```php
 <?php
 
 use Illuminate\Support\Facades\Lang;
@@ -525,7 +525,7 @@ admin.password.reset
 
 Still inside `AdminResetPasswordNotification` at the `construct` put the `$token` varial as parameter and set `$this->token = $token;` like below
 
-```
+```php
 <?php
 
 public function __construct($token)
@@ -536,7 +536,7 @@ public function __construct($token)
 
 Go to `vendor/laravel/framework/src/Illuminate/Auth/Passwords/CanResetPassword.php` and copy the function `sendPasswordResetNotification()` to `app/Admin.php`
 
-```
+```php
 <?php
 
 public function sendPasswordResetNotification($token)
@@ -547,7 +547,7 @@ public function sendPasswordResetNotification($token)
 
 At the `app/Admin.php` file use the `AdminResetPasswordNotification` like below
 
-```
+```php
 <?php
 
 use App\Notifications\AdminResetPasswordNotification;
@@ -557,13 +557,13 @@ In the function `sendPasswordResetNotification()` inside `app/Admin.php` make th
 
 ---
 this:
-```
+```php
 <?php
 
 $this->notify(new ResetPasswordNotification($token));
 ```
 to:
-```
+```php
 <?php
 
 $this->notify(new AdminResetPasswordNotification($token));
@@ -576,7 +576,7 @@ If your IDE permite, press Ctrl and click on the `ResetsPasswords` or open the `
 
 Copy the function `showResetForm()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
 
-```
+```php
 <?php
 
 public function showResetForm(Request $request, $token = null)
@@ -591,13 +591,13 @@ In the function `showResetForm()` inside `app/Http/Controllers/Admin/ResetPasswo
 
 ---
 this:
-```
+```php
 <?php
 
 return view('auth.passwords.reset')->with(
 ```
 to:
-```
+```php
 <?php
 
 return view('admin.passwords.reset')->with(
@@ -606,7 +606,7 @@ return view('admin.passwords.reset')->with(
 
 Copy the function `broker()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
 
-```
+```php
 <?php
 
 public function broker()
@@ -619,13 +619,13 @@ In the function `broker()` inside `app/Http/Controllers/Admin/ResetPasswordContr
 
 ---
 this:
-```
+```php
 <?php
 
 return Password::broker();
 ```
 to:
-```
+```php
 <?php
 
 return Password::broker('admins');
@@ -634,7 +634,7 @@ return Password::broker('admins');
 
 Copy the function `guard()` from `ResetsPasswords.php` to `app/Http/Controllers/Admin/ResetPasswordController.php`
 
-```
+```php
 <?php
 
 protected function guard()
@@ -647,13 +647,13 @@ In the function `broker()` inside `app/Http/Controllers/Admin/ResetPasswordContr
 
 ---
 this:
-```
+```php
 <?php
 
 return Auth::guard();
 ```
 to:
-```
+```php
 <?php
 
 return Auth::guard('admin');
